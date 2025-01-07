@@ -1,9 +1,77 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { createCustomer } from "@/lib/paystack"; // Import the createCustomer function
+
+const generateRandomEmail = () => {
+  const emailDomains = [
+    "example.com",
+    "testmail.com",
+    "demo.com",
+    "mailinator.com",
+  ];
+  const randomName = `user${Math.floor(Math.random() * 10000)}`;
+  const randomDomain =
+    emailDomains[Math.floor(Math.random() * emailDomains.length)];
+  return `${randomName}@${randomDomain}`;
+};
+
+const generateRandomFirstName = () => {
+  const firstNames = [
+    "John",
+    "Jane",
+    "Alex",
+    "Emily",
+    "Chris",
+    "Taylor",
+    "Jordan",
+    "Morgan",
+    "Ryan",
+    "Sophia",
+    "Ethan",
+    "Ava",
+    "Noah",
+    "Mia",
+    "Liam",
+    "Isabella",
+    "Jacob",
+    "Olivia",
+    "Daniel",
+    "Emma",
+  ];
+  return firstNames[Math.floor(Math.random() * firstNames.length)];
+};
+
+const generateRandomLastName = () => {
+  const lastNames = [
+    "Smith",
+    "Johnson",
+    "Brown",
+    "Taylor",
+    "Anderson",
+    "Thomas",
+    "Jackson",
+    "White",
+    "Harris",
+    "Martin",
+    "Thompson",
+    "Garcia",
+    "Martinez",
+    "Robinson",
+    "Clark",
+    "Rodriguez",
+    "Lewis",
+    "Lee",
+    "Walker",
+    "Hall",
+  ];
+  return lastNames[Math.floor(Math.random() * lastNames.length)];
+};
+
+const generateRandomPhone = () =>
+  `080${Math.floor(10000000 + Math.random() * 90000000)}`;
 
 const AddEmailForm = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +79,14 @@ const AddEmailForm = () => {
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+
+  // Prefill the fields with random data on mount
+  useEffect(() => {
+    setEmail(generateRandomEmail());
+    setFirstName(generateRandomFirstName());
+    setLastName(generateRandomLastName());
+    setPhone(generateRandomPhone());
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,10 +122,10 @@ const AddEmailForm = () => {
       });
 
       setMessage("Customer added successfully!");
-      setEmail("");
-      setFirstName("");
-      setLastName("");
-      setPhone("");
+      setEmail(generateRandomEmail());
+      setFirstName(generateRandomFirstName());
+      setLastName(generateRandomLastName());
+      setPhone(generateRandomPhone());
     } catch (error) {
       console.error("Error adding customer:", error);
       setMessage("Failed to add customer. Try again.");
